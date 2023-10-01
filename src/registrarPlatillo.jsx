@@ -4,7 +4,6 @@ import React, {useState} from 'react';
 
 const {Title}=Typography
 
-const { TextArea } = Input;
 function MyForm() {
   const onFinish = (values) => {
     console.log(values);
@@ -29,6 +28,49 @@ function MyForm() {
     },
   };
 */}
+////////////////////////////////
+const [platillo, setPlatillo] = useState({
+  nombre: '',
+
+});
+
+/////////////////////PASO DE FRONT END A BACK END//////////////////////////////////
+const handleInputChange = (e) => {
+  const { name, value, type, files } = e.target;
+  setPlatillo({
+    ...platillo,
+    [name]: type === 'file' ? files[0] : value,
+  });
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  // Crea un objeto FormData para enviar los datos y archivos al backend
+  const formData = new FormData();
+  formData.append('nombre', platillo.nombre);
+
+
+  try {
+    // Realiza la solicitud POST al backend
+    const response = await fetch('http://localhost:5173/backen/index.js', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (response.ok) {
+      // Procesa la respuesta exitosa del servidor (si es necesario)
+      console.log('Platillo registrado correctamente');
+    } else {
+      // Maneja errores de la solicitud (puedes mostrar un mensaje de error al usuario)
+      console.error('Error al registrar el platillo');
+    }
+  } catch (error) {
+    console.error('Error en la solicitud POST:', error);
+  }
+};
+
+///////////////////////////////////////////////////////////////////////////////////////
 
 //Logia imagen y video
 const [fileUploaded, setFileUploaded] = useState(false);
@@ -74,10 +116,13 @@ const [fileUploaded, setFileUploaded] = useState(false);
           }}
         >
     </Breadcrumb>
-      <Form.Item
+      <Form.Item onSubmit={handleSubmit}
         label={
-        <span>Título:<span style={{ color: 'red', marginLeft: '4px' }}>*</span></span>}
+        <span>Título:<span style={{ color: 'red', marginLeft: '4px' }}></span></span>}
         name="titulo"
+        value={platillo.titulo}
+            onChange={handleInputChange}
+            required
         colon={false}
         rules={[{ required: true, message: 'Ingresa el título del platillo'},
         {max: 50, message: 'El título no puede tener más de 50 caracteres'},]}
@@ -101,7 +146,7 @@ const [fileUploaded, setFileUploaded] = useState(false);
 
       <Form.Item
         label={
-        <span>Imagen:<span style={{ color: 'red', marginLeft: '4px' }}>*</span></span>}
+        <span>Imagen:<span style={{ color: 'red', marginLeft: '4px' }}></span></span>}
         name="imagen"
         colon={false}
         rules={[{ required: true, message: 'No se ha subido ninguna imagen' }]}
@@ -117,7 +162,7 @@ const [fileUploaded, setFileUploaded] = useState(false);
 {/*descripcion*/}
       <Form.Item
         label={
-        <span>Descripción:<span style={{ color: 'red', marginLeft: '4px' }}>*</span></span>}
+        <span>Descripción:<span style={{ color: 'red', marginLeft: '4px' }}></span></span>}
         name="descripción"
         colon={false}
         rules={[{ required: true, message: 'Ingrese una descripcion' },
@@ -134,7 +179,7 @@ const [fileUploaded, setFileUploaded] = useState(false);
             value={text2}
             maxLength2={500} // Limitar a 100 caracteres
           />
-          <div style={{ position: 'absolute', top: 45, right: 0, padding: '8px', color: 'gray' }}>
+          <div style={{ position: 'absolute', top: 0, right: 0, padding: '8px', color: 'gray' }}>
             {text2.length} / 500
           </div>
         </div>
@@ -142,7 +187,7 @@ const [fileUploaded, setFileUploaded] = useState(false);
 
       <Form.Item
       label={
-        <span>Video:<span style={{ color: 'red', marginLeft: '4px' }}>*</span></span>}
+        <span>Video:<span style={{ color: 'red', marginLeft: '4px' }}></span></span>}
         name="video"
         colon={false}
         rules={[{ required: true, message: 'No se ha subido ningun video' }]}
@@ -161,7 +206,7 @@ const [fileUploaded, setFileUploaded] = useState(false);
         <Button type="primary" htmlType="submit" style={{ marginRight: '20px' }}>
           Registrar
         </Button>
-        <Button type="primary" htmlType="submit" style={{ marginLeft: '120px' }}>
+        <Button type="submit" style={{ marginLeft: '120px' }}>
           Cancelar
         </Button>
       </Form.Item>

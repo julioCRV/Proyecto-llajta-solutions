@@ -32,8 +32,20 @@ const App2 = () => {
           {items1.map((item) => (
             <Menu.Item key={item}>
               {item === 'Home' && <HomeOutlined />} {/* Agrega ícono para Home */}
-              {item === 'Platillos Tradicionales' && <UnorderedListOutlined />} {/* Agrega ícono para Platillos Tradicionales */}
-              {item}
+              {item === 'Platillos Tradicionales'  && <UnorderedListOutlined />}
+              {item === 'Platillos Tradicionales'  && <UnorderedListOutlined />?(
+                <SubMenu 
+                title={item}
+                key={item}
+                className={openSubMenu ? 'ant-menu-submenu-open' : ''}
+              >
+                <Menu.Item key="1">Registrar Platillo</Menu.Item>
+                <Menu.Item key="2" defaultSelectedKeys={['Registrar Platillo']}>Mostrar Platillo</Menu.Item>
+    
+              </SubMenu>
+              ):(
+                item
+              )}
             </Menu.Item>
           ))}
         </Menu>
