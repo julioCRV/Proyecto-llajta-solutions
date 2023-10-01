@@ -1,0 +1,5 @@
+.custom-button {
+    border: 0cap; /* Elimina el borde para un aspecto más limpio */
+    cursor: pointer; /* Cambia el cursor al pasar el ratón por encima del botón */
+  }
+  
